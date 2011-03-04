@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
     'Class::Accessor' => '0.34',
     'Sub::Call::Tail' => '0.01'
   },
-  'VERSION' => '0.001',
+  'VERSION' => '0.003',
   'test' => {
     'TESTS' => ''
   }

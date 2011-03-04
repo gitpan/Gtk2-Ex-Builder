@@ -15,4 +15,4 @@ name: Gtk2-Ex-Builder
 requires:
   Class::Accessor: 0.34
   Sub::Call::Tail: 0.01
-version: 0.001
+version: 0.003
