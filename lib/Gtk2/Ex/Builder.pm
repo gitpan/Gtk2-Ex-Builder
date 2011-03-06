@@ -1,6 +1,6 @@
 package Gtk2::Ex::Builder;
 BEGIN {
-  $Gtk2::Ex::Builder::VERSION = '0.003';
+  $Gtk2::Ex::Builder::VERSION = '0.003001';
 }
 use strict;
 use warnings;
@@ -17,7 +17,7 @@ has '_code', is => 'ro';
 has 'is_built', is => 'rw';
 
 BEGIN {
-    our @EXPORT__in = qw(hav meta sets gets on);
+    our @EXPORT__in = qw(hav info sets gets on);
     our @EXPORT__out = qw(builder);
     our @EXPORT = (@EXPORT__in, @EXPORT__out);
     
@@ -83,9 +83,9 @@ sub build {
             $self->_gobj->add($gobj);
         }
     };
-    local *meta = sub {
+    local *info = sub {
         my @args = @_;
-        die "wrong number of arguments for 'meta'" unless @args % 2 == 0;
+        die "wrong number of arguments for 'info'" unless @args % 2 == 0;
         while (my ($k, $v) = splice @args, 0, 2) {
             if ($k eq 'is') {
                 $self->_id($v);
@@ -99,20 +99,20 @@ sub build {
     local *sets = sub {
         my ($command, @para) = @_;
         my $method = "set_$command";
-        die "you should 'meta isa => '*' before 'sets' to create an gtk2 object"
+        die "you should 'info isa => '*' before 'sets' to create an gtk2 object"
             unless defined $self->_gobj;
         return $self->_gobj->$method(@para);
     };
     local *gets = sub {
         my ($command) = @_;
         my $method = "get_$command";
-        die "you should 'meta isa => '*' before 'gets' to create an gtk2 object"
+        die "you should 'info isa => '*' before 'gets' to create an gtk2 object"
             unless defined $self->_gobj;
         return $self->_gobj->$method();
     };
     local *on = sub {
         my ($signal, $code) = @_;
-        die "you should 'meta isa => '*' before 'on' to create an gtk2 object"
+        die "you should 'info isa => '*' before 'on' to create an gtk2 object"
             unless defined $self->_gobj;
         return $signal->_gobj->signal_connect( $signal => $code );
     };
@@ -191,14 +191,14 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
    use Gtk2::Ex::Builder;
 
    my $app = builder {
-     meta isa => 'Window';
+     info isa => 'Window';
      sets title => 'My Application';
      sets default_size => 400, 400;
      on delete_event => sub { Gtk2->main_quit };
 
      hav builder {
-       meta isa => 'Button';
-       meta is => 'my_button';
+       info isa => 'Button';
+       info is => 'my_button';
        sets label => 'Hello World';
        on clicked => sub { print "Hi\n" };
      };
